@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
-  spaces: [],
+  space: null,
   loading: true,
 };
 
@@ -14,7 +14,7 @@ const detailPageSlice = createSlice({
 
     spacebyStoryFetched: (state, action) => {
       //   console.log(" action", action);
-      state.spaces = action.payload;
+      state.space = action.payload;
       state.loading = false;
     },
   },
