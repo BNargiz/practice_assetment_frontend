@@ -28,10 +28,18 @@ export const userSlice = createSlice({
         (s) => s.id !== storyId
       );
     },
+    createStory: (state, action) => {
+      state.profile.space.stories.push(action.payload);
+    },
   },
 });
 
-export const { loginSuccess, logOut, tokenStillValid, deleteStory } =
-  userSlice.actions;
+export const {
+  loginSuccess,
+  logOut,
+  tokenStillValid,
+  deleteStory,
+  createStory,
+} = userSlice.actions;
 
 export default userSlice.reducer;

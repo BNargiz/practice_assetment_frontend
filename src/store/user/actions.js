@@ -3,7 +3,13 @@ import axios from "axios";
 import { selectToken } from "./selectors";
 import { appLoading, appDoneLoading, setMessage } from "../appState/slice";
 import { showMessageWithTimeout } from "../appState/actions";
-import { loginSuccess, logOut, tokenStillValid, deleteStory } from "./slice";
+import {
+  loginSuccess,
+  logOut,
+  tokenStillValid,
+  deleteStory,
+  createStory,
+} from "./slice";
 
 export const signUp = (name, email, password) => {
   return async (dispatch, getState) => {
@@ -133,3 +139,34 @@ export const deleteOneStory = (id) => async (dispatch, getState) => {
     console.log(e.message);
   }
 };
+
+//newstory
+
+export const newStoryCreated =
+  ({ name, content, imageUrl }) =>
+  async (dispatch, getState) => {
+    try {
+      const {
+        profile: { space },
+        token,
+      } = getState().user;
+      dispatch(appLoading());
+      const response = await axios.post(
+        `${apiUrl}/spaces/${space.id}/stories`,
+        {
+          name,
+          content,
+          imageUrl,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("new story", response.data);
+      dispatch(createStory(response.data));
+      dispatch(showMessageWithTimeout("success", true, "Story Posted"));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };

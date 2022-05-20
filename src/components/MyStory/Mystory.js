@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { deleteOneStory } from "../../store/user/actions";
 
 const MyStory = (props) => {
   const dispatch = useDispatch();
+
   return (
     <div style={{ textAlign: "center", padding: 20 }}>
       <h3>{props.name}</h3>
