@@ -6,7 +6,7 @@ export const fetchSpacesbystory = (id) => async (dispatch, getState) => {
   try {
     dispatch(startLoading());
     const response = await axios.get(`${apiUrl}/spaces/${id}`);
-    console.log("response", response.data);
+    // console.log("response", response.data);
 
     const spaceWithStory = response.data;
     // console.log("response", spaces);

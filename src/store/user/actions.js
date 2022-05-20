@@ -3,7 +3,7 @@ import axios from "axios";
 import { selectToken } from "./selectors";
 import { appLoading, appDoneLoading, setMessage } from "../appState/slice";
 import { showMessageWithTimeout } from "../appState/actions";
-import { loginSuccess, logOut, tokenStillValid } from "./slice";
+import { loginSuccess, logOut, tokenStillValid, deleteStory } from "./slice";
 
 export const signUp = (name, email, password) => {
   return async (dispatch, getState) => {
@@ -16,7 +16,10 @@ export const signUp = (name, email, password) => {
       });
 
       dispatch(
-        loginSuccess({ token: response.data.token, user: response.data.user })
+        loginSuccess({
+          token: response.data.token,
+          user: response.data.user,
+        })
       );
       dispatch(showMessageWithTimeout("success", true, "account created"));
       dispatch(appDoneLoading());
@@ -99,7 +102,7 @@ export const getUserWithStoredToken = () => {
       const response = await axios.get(`${apiUrl}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+      console.log("/me:", response.data);
       // token is still valid
       dispatch(tokenStillValid({ user: response.data }));
       dispatch(appDoneLoading());
@@ -115,4 +118,18 @@ export const getUserWithStoredToken = () => {
       dispatch(appDoneLoading());
     }
   };
+};
+//deleteStory
+
+export const deleteOneStory = (id) => async (dispatch, getState) => {
+  const token = getState().user.token;
+  try {
+    const response = await axios.delete(`${apiUrl}/story/delete/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("deleted story", response.data);
+    dispatch(deleteStory({ storyId: id }));
+  } catch (e) {
+    console.log(e.message);
+  }
 };
